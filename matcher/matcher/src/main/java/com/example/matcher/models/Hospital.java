@@ -6,16 +6,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.ArrayList;
+
 @Getter
 @Setter
 @NoArgsConstructor
-@Document("hospitals")
+@Document("_hospitals")
 public class Hospital {
     @Id
     private String id;
     private String name;
     private double latitude;
     private double longitude;
+    private ArrayList<Long> recipientIds;
+    private ArrayList<Long> organIds;
+    private ArrayList<Long> notificationIds;
 
     public Hospital(String id, String name, double latitude, double longitude){
         super();
