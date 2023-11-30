@@ -1,0 +1,84 @@
+@mixin glass-look {
+  background: rgba(117, 114, 114, 0.18);
+  backdrop-filter: blur(7.5px);
+  box-shadow: 0 8px 32px 0 rgba(4, 4, 4, 0.18);
+  border-radius: 20px;
+}
+
+
+#root {
+  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.form-heading {
+  text-align: center;
+  font-weight: bold;
+}
+
+.form-container {
+  @include glass-look();
+  padding: 3%;
+  width: 60%;
+  flex: 1 0 100%;
+  backdrop-filter: blur(10px);
+}
+
+.page{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+  flex-direction: column;
+  
+}
+
+.form-date {
+  color: black;
+  background-color: white;
+  width: 100%;
+  padding: 5px;
+  border-radius: 10px;
+  box-shadow: none;
+}
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+.form-sub-heading {
+  text-align: center;
+  font-weight: bold;
+}
+
+.table-container {
+  @include glass-look();
+  padding: 3%;
+  max-width: 60%;
+  flex: 1 0 100%;
+  backdrop-filter: blur(10px);
+}
+
+.recipient-table {
+  text-align: center;
+  @include glass-look();
+  tr {
+    border-bottom: none !important;
+  }
+  td, th {
+    background: none !important;
+  }
+  th {
+    cursor: pointer;
+  }
+  width: 80% !important;
+  background: none;
+  border-radius: 20px;
+  max-height: 80%;
+  overflow-y: scroll;
+}
+
+.filter {
+  width: 40%;
+}
