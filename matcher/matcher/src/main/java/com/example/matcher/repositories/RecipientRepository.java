@@ -9,4 +9,7 @@ import java.util.List;
 public interface RecipientRepository extends MongoRepository<Recipient, Long> {
     @Query("{hospitalId : '?0'}")
     List<Recipient> findRecipientByHospitalId(String id);
+
+    @Query("{organNeeded : ?0}")
+    List<Recipient> filterRecipientsByOrgan(String organ);
 }

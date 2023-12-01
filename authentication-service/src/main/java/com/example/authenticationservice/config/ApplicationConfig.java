@@ -21,13 +21,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class ApplicationConfig {
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         return http.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/authentication-service/v1/**").permitAll()
+                .requestMatchers("/auth/**").permitAll()
                 .and()
                 .build();
     }
@@ -51,7 +51,4 @@ public class ApplicationConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
         return config.getAuthenticationManager();
     }
-
-
-
 }

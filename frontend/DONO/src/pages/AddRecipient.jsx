@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { apiUrl, hospitalID } from "../globals";
 
 const AddRecipient = () => {
   // State variables for form inputs
@@ -15,27 +17,105 @@ const AddRecipient = () => {
   const [organNeeded, setOrganNeeded] = useState("");
   const [severity, setSeverity] = useState("");
   const [viability, setViability] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = (event) => {
-    // Handle form submission
     event.preventDefault();
-
-    // Use the form input states as needed
-    console.log({
-      name,
-      dob,
-      sex,
-      phone,
-      nextOfKin,
-      nextOfKinPhone,
-      bloodGroup,
-      isDiabetic,
-      isHypertensive,
-      description,
-      organNeeded,
-      severity,
-      viability,
-    });
+    let antigen = "";
+    let rh = false;
+    if (name == "") {
+      setErrorMessage("Name is required");
+      return;
+    }
+    if (dob == "") {
+      setErrorMessage("Date of birth is required");
+      return;
+    } else if (dob > new Date().toISOString().split("T")[0]) {
+      setErrorMessage("Date of birth cannot be in the future");
+      return;
+    }
+    if (sex == "") {
+      setSex("Sex is mandatory");
+    }
+    if (phone == "") {
+      setPhone("Phone is mandatory");
+    }
+    if (bloodGroup == "") {
+      setBloodGroup("Blood group is mandatory");
+    } else {
+      if (bloodGroup.slice(-1) === "+") {
+        rh = true;
+      } else {
+        rh = false;
+      }
+      switch (bloodGroup.slice(0, 1)) {
+        case "A":
+          antigen = "A";
+          break;
+        case "B":
+          antigen = "B";
+          break;
+        case "O":
+          antigen = "O";
+          break;
+        case "AB":
+          antigen = "AB";
+          break;
+      }
+    }
+    let diabetic = isDiabetic ? "TYPE1" : "NAN";
+    const deceased = false;
+    if (organNeeded == "") {
+      setErrorMessage("Organ needed is mandatory");
+    }
+    if (severity == "") {
+      setErrorMessage("Severity is mandatory");
+    }
+    if (viability == "") {
+      setErrorMessage("Viability is mandatory");
+    }
+    let data = {
+      name: name,
+      dob: dob,
+      sex: sex,
+      phoneNumber: phone,
+      nextOfKin: nextOfKin,
+      nextOfKinPhone: nextOfKinPhone,
+      antigen: antigen,
+      rh: rh,
+      diabetes: diabetic,
+      hypertensive: isHypertensive,
+      description: description,
+      hospitalId: hospitalID,
+      deceased: deceased,
+      organNeeded: organNeeded,
+      severity: severity,
+      viability: viability,
+    };
+    // console.log(data);
+    axios
+      .post(apiUrl + "/matcher/recipient", data)
+      .then((res) => {
+        setSuccessMessage("Recipient added successfully");
+        setName("");
+        setDob("");
+        setSex("");
+        setPhone("");
+        setNextOfKin("");
+        setNextOfKinPhone("");
+        setBloodGroup("");
+        setIsDiabetic(false);
+        setIsHypertensive(false);
+        setDescription("");
+        setOrganNeeded("");
+        setSeverity("");
+        setViability("");
+      })
+      .catch((res) => {
+        console.log(res);
+        setErrorMessage("Error adding recipient");
+      });
   };
 
   return (
@@ -44,6 +124,8 @@ const AddRecipient = () => {
         <form onSubmit={handleSubmit}>
           <h2 className="form-heading">Add Recipient</h2>
           <h3 className="form-sub-heading">Patient Details</h3>
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
+
           <div className="mb-3">
             <label htmlFor="recipient-name" className="form-label">
               Name
@@ -188,10 +270,10 @@ const AddRecipient = () => {
               <option value="" disabled>
                 Select
               </option>
-              <option value="Heart">Heart</option>
-              <option value="Lungs">Lungs</option>
-              <option value="Kidneys">Kidneys</option>
-              <option value="Liver">Liver</option>
+              <option value="HEART">Heart</option>
+              <option value="LUNG">Lung</option>
+              <option value="KIDNEY">Kidney</option>
+              <option value="LIVER">Liver</option>
             </select>
           </div>
           <div className="mb-3">
@@ -246,6 +328,9 @@ const AddRecipient = () => {
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
+          {successMessage && (
+            <h4 className="text-success textcenter">{successMessage}</h4>
+          )}
           <button type="submit" className="btn btn-primary">
             Submit
           </button>

@@ -1,181 +1,38 @@
-import { React, useState } from "react";
+import { React, useState, useEffect } from "react";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { apiUrl, hospitalID } from "../globals";
 
-const data = [
-  {
-    id: "1",
-    name: "John Doe",
-    dob: new Date("1990-05-15"),
-    sex: "Male",
-    phone: "123-456-7890",
-    nextOfKin: "Jane Doe",
-    nextOfKinPhone: "987-654-3210",
-    bloodGroup: "A+",
-    isDiabetic: false,
-    isHypertensive: true,
-    description: "Recipient with no specific conditions",
-    organNeeded: "Heart",
-    severity: "3",
-    viability: "4",
-  },
-  {
-    id: "2",
-    name: "Alice Johnson",
-    dob: new Date("1985-08-22"),
-    sex: "Female",
-    phone: "555-123-4567",
-    nextOfKin: "Bob Johnson",
-    nextOfKinPhone: "555-987-6543",
-    bloodGroup: "B-",
-    isDiabetic: true,
-    isHypertensive: false,
-    description: "Recipient with diabetes",
-    organNeeded: "Kidney",
-    severity: "2",
-    viability: "5",
-  },
-  {
-    id: "3",
-    name: "Charlie Smith",
-    dob: new Date("1978-12-10"),
-    sex: "Male",
-    phone: "321-654-9870",
-    nextOfKin: "Diana Smith",
-    nextOfKinPhone: "789-456-1230",
-    bloodGroup: "O+",
-    isDiabetic: false,
-    isHypertensive: true,
-    description: "Recipient with hypertension",
-    organNeeded: "Liver",
-    severity: "4",
-    viability: "3",
-  },
-  {
-    id: "4",
-    name: "Eva Thompson",
-    dob: new Date("1992-04-18"),
-    sex: "Female",
-    phone: "444-555-6666",
-    nextOfKin: "Frank Thompson",
-    nextOfKinPhone: "777-888-9999",
-    bloodGroup: "AB+",
-    isDiabetic: true,
-    isHypertensive: true,
-    description: "Recipient with diabetes and hypertension",
-    organNeeded: "Lung",
-    severity: "1",
-    viability: "5",
-  },
-  {
-    id: "5",
-    name: "George Wilson",
-    dob: new Date("1980-09-25"),
-    sex: "Male",
-    phone: "999-888-7777",
-    nextOfKin: "Helen Wilson",
-    nextOfKinPhone: "666-555-4444",
-    bloodGroup: "B+",
-    isDiabetic: false,
-    isHypertensive: false,
-    description: "Healthy recipient",
-    organNeeded: "Kidney",
-    severity: "2",
-    viability: "4",
-  },
-  {
-    id: "6",
-    name: "Ivy Brown",
-    dob: new Date("1995-02-08"),
-    sex: "Female",
-    phone: "111-222-3333",
-    nextOfKin: "Jack Brown",
-    nextOfKinPhone: "444-333-2222",
-    bloodGroup: "O-",
-    isDiabetic: true,
-    isHypertensive: false,
-    description: "Recipient with diabetes",
-    organNeeded: "Heart",
-    severity: "3",
-    viability: "2",
-  },
-  {
-    id: "7",
-    name: "Kevin Miller",
-    dob: new Date("1975-07-14"),
-    sex: "Male",
-    phone: "777-666-5555",
-    nextOfKin: "Laura Miller",
-    nextOfKinPhone: "222-333-4444",
-    bloodGroup: "A-",
-    isDiabetic: true,
-    isHypertensive: true,
-    description: "Recipient with diabetes and hypertension",
-    organNeeded: "Liver",
-    severity: "5",
-    viability: "1",
-  },
-  {
-    id: "8",
-    name: "Mia Davis",
-    dob: new Date("1988-11-30"),
-    sex: "Female",
-    phone: "666-777-8888",
-    nextOfKin: "Nathan Davis",
-    nextOfKinPhone: "333-444-5555",
-    bloodGroup: "AB-",
-    isDiabetic: false,
-    isHypertensive: false,
-    description: "Healthy recipient",
-    organNeeded: "Lung",
-    severity: "2",
-    viability: "3",
-  },
-  {
-    id: "9",
-    name: "Oliver White",
-    dob: new Date("1998-06-20"),
-    sex: "Male",
-    phone: "222-111-4444",
-    nextOfKin: "Penelope White",
-    nextOfKinPhone: "888-999-0000",
-    bloodGroup: "A+",
-    isDiabetic: false,
-    isHypertensive: false,
-    description: "Healthy recipient",
-    organNeeded: "Heart",
-    severity: "4",
-    viability: "4",
-  },
-  {
-    id: "10",
-    name: "Sophia Taylor",
-    dob: new Date("1983-03-05"),
-    sex: "Female",
-    phone: "999-111-2222",
-    nextOfKin: "Tom Taylor",
-    nextOfKinPhone: "555-444-3333",
-    bloodGroup: "O+",
-    isDiabetic: true,
-    isHypertensive: true,
-    description: "Recipient with diabetes and hypertension",
-    organNeeded: "Kidney",
-    severity: "1",
-    viability: "5",
-  },
-];
-
-const RecipientTable = ({ data }) => {
+const RecipientTable = ({}) => {
+  const [data, setData] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
   const [filterOrgan, setFilterOrgan] = useState("");
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedRecipient, setSelectedRecipient] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loadingMessage, setLoadingMessage] = useState("Loading...");
   const [editedFields, setEditedFields] = useState({
     viability: "",
     severity: "",
     description: "",
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(apiUrl + "/matcher/hospital/" + hospitalID + "/recipients")
+      .then((response) => {
+        setLoadingMessage("");
+        let resData = response.data;
+
+        setData(resData.filter((recipient) => recipient.organNeeded != "NAN"));
+      })
+      .catch((error) => {
+        setErrorMessage("Error fetching recipients");
+        console.log(error);
+      });
+  });
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -190,7 +47,7 @@ const RecipientTable = ({ data }) => {
     setEditedFields({
       viability: recipient.viability,
       severity: recipient.severity,
-      description: recipient.description,
+      description: recipient.medicalRecord.description,
     });
     setModalIsOpen(true);
   };
@@ -202,17 +59,34 @@ const RecipientTable = ({ data }) => {
   const handleSaveChanges = () => {
     // Update the recipient with the edited fields
     if (selectedRecipient) {
-      // Here you would typically update your data source or make an API call
-      console.log(
-        `Updating recipient ${selectedRecipient.id} with edited fields`,
-        editedFields
-      );
+      axios
+        .put(
+          apiUrl + "/matcher/recipient/" + selectedRecipient.id + "/details",
+          editedFields
+        )
+        .then((response) => {
+          console.log("updated successfully");
+        })
+        .catch((response) => {
+          console.log(response);
+        });
     }
 
     // Close the modal
     closeEditModal();
   };
 
+  const handleRemove = (recipientId) => {
+    // Handle remove logic here
+    axios
+      .delete(apiUrl + "/matcher/recipient/" + recipientId)
+      .then((response) => {
+        console.log("removed successfully");
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
   const handleFilterOrgan = (event) => {
     setFilterOrgan(event.target.value);
   };
@@ -249,6 +123,7 @@ const RecipientTable = ({ data }) => {
   return (
     <div className="page">
       <h2 className="text-center">Patient Waitlist</h2>
+      {errorMessage && <p className="text-danger">{errorMessage}</p>}
       <button
         className="btn btn-primary flex-fill"
         onClick={() => {
@@ -266,12 +141,13 @@ const RecipientTable = ({ data }) => {
           value={filterOrgan}
         >
           <option value="">All</option>
-          <option value="Heart">Heart</option>
-          <option value="Kidney">Kidney</option>
-          <option value="Liver">Liver</option>
-          <option value="Lung">Lung</option>
+          <option value="HEART">Heart</option>
+          <option value="KIDNEY">Kidney</option>
+          <option value="LIVER">Liver</option>
+          <option value="LUNG">Lung</option>
         </select>
       </div>
+      {loadingMessage && <h4 className="text-center">{loadingMessage}</h4>}
       <div className="table-container">
         <table className="table table-hover align-middle">
           <thead>
@@ -320,6 +196,7 @@ const RecipientTable = ({ data }) => {
         isOpen={modalIsOpen}
         onRequestClose={closeEditModal}
         contentLabel="Edit Recipient Modal"
+        ariaHideApp={false}
       >
         <h2>Edit Recipient</h2>
         <label className="form-label" htmlFor="edit-viability">
@@ -384,13 +261,8 @@ const RecipientTable = ({ data }) => {
   );
 };
 
-const handleRemove = (recipientId) => {
-  // Handle remove logic here
-  console.log(`Remove recipient with ID ${recipientId}`);
-};
-
 const ActiveRecipents = () => {
-  return <RecipientTable data={data} />;
+  return <RecipientTable />;
 };
 
 export default ActiveRecipents;

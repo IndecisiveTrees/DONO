@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -22,8 +23,9 @@ public class Organ {
     private LocalDateTime creationTime;
     private OrganStatus organStatus;
     private String description;
+    private ArrayList<Long> declinedIds = new ArrayList<Long>();
 
-    public Organ(long donorId, String hospitalId, OrganType organType, LocalDateTime creationTime, OrganStatus organStatus, String description) {
+    public Organ(long donorId, String hospitalId, OrganType organType, LocalDateTime creationTime, OrganStatus organStatus, String description, ArrayList<Long> declinedIds) {
         super();
         this.donorId = donorId;
         this.hospitalId = hospitalId;
@@ -31,5 +33,12 @@ public class Organ {
         this.creationTime = creationTime;
         this.organStatus = organStatus;
         this.description = description;
+        this.declinedIds = declinedIds;
+        if(this.declinedIds == null){
+            this.declinedIds = new ArrayList<Long>();
+        }
+    }
+    public void addDeclined(long declinedId){
+        declinedIds.add(declinedId);
     }
 }

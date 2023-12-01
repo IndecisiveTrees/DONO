@@ -13,10 +13,8 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
     public AuthenticationFilter(){
         super(Config.class);
     }
-
     @Autowired
     private RouteValidator validator;
-
     @Autowired
     private JwtService jwtService;
 
@@ -37,11 +35,11 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 }catch(Exception e){
                     throw new RuntimeException("Token invalid");
                 }
-                String rollNumber = jwtService.extractUsername(authHeader);
+                String id = jwtService.extractUsername(authHeader);
                 exchange
                         .getRequest()
                         .mutate()
-                        .header("x-RollNumber", rollNumber)
+                        .header("x-id", id)
                         .build();
             }
             return chain.filter(exchange);

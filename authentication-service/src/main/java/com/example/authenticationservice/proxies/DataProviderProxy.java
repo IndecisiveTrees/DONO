@@ -6,9 +6,9 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name="data-provider")
+@FeignClient(name="matcher")
 public interface DataProviderProxy {
-    @PostMapping("/data-provider/v1/user")
+    @PostMapping("/matcher/hospital/user")
     public User createUser(@RequestBody RegisterRequest req);
 }
 
