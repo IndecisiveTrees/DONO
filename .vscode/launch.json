@@ -1,0 +1,46 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "ApiGatewayApplication",
+            "request": "launch",
+            "mainClass": "com.example.apigateway.ApiGatewayApplication",
+            "projectName": "api-gateway"
+        },
+        {
+            "type": "java",
+            "name": "AuthenticationServiceApplication",
+            "request": "launch",
+            "mainClass": "com.example.authenticationservice.AuthenticationServiceApplication",
+            "projectName": "authentication-service"
+        },
+        {
+            "type": "java",
+            "name": "MatcherApplication",
+            "request": "launch",
+            "mainClass": "com.example.matcher.MatcherApplication",
+            "projectName": "matcher",
+            "env" : {
+                "DB_DATABASE":"dono",
+                "DB_URI":"mongodb+srv://subhajeetlahiri:something@dono.qkqnfhd.mongodb.net/dono"
+            }
+        },
+        {
+            "type": "java",
+            "name": "NamingServerApplication",
+            "request": "launch",
+            "mainClass": "com.example.namingserver.NamingServerApplication",
+            "projectName": "naming-server"
+        }
+    ]
+}
