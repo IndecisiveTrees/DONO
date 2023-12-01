@@ -82,6 +82,15 @@
   // overflow-y: scroll;
 }
 
+.card {
+  background: none !important;
+  @include glass-look();
+}
+
 .filter {
   width: 40%;
+}
+
+#navbarNav {
+  margin-left: auto;
 }
