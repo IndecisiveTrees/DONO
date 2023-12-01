@@ -37,12 +37,15 @@ const AddRecipient = () => {
     }
     if (sex == "") {
       setSex("Sex is mandatory");
+      return;
     }
     if (phone == "") {
       setPhone("Phone is mandatory");
+      return;
     }
     if (bloodGroup == "") {
       setBloodGroup("Blood group is mandatory");
+      return;
     } else {
       if (bloodGroup.slice(-1) === "+") {
         rh = true;

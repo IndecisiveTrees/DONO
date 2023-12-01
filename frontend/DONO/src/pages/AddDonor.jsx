@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { apiUrl, hospitalID } from "../globals";
+import axios from "axios";
 
 const AddDonor = () => {
   // State variables for form inputs
@@ -20,31 +22,166 @@ const AddDonor = () => {
   const [lungDescription, setLungDescription] = useState("");
   const [kidneyDescription, setKidneyDescription] = useState("");
   const [liverDescription, setLiverDescription] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleSubmit = (event) => {
     // Handle form submission
     event.preventDefault();
+    let antigen = "";
+    let rh = false;
+    let success = false;
+    if (name == "") {
+      setErrorMessage("Name is required");
+      return;
+    }
+    if (dob == "") {
+      setErrorMessage("Date of birth is required");
+      return;
+    } else if (dob > new Date().toISOString().split("T")[0]) {
+      setErrorMessage("Date of birth cannot be in the future");
+      return;
+    }
+    if (sex == "") {
+      setSex("Sex is mandatory");
+      return;
+    }
+    if (phone == "") {
+      setPhone("Phone is mandatory");
+      return;
+    }
+    if (bloodGroup == "") {
+      setBloodGroup("Blood group is mandatory");
+      return;
+    } else {
+      if (bloodGroup.slice(-1) === "+") {
+        rh = true;
+      } else {
+        rh = false;
+      }
+      switch (bloodGroup.slice(0, 1)) {
+        case "A":
+          antigen = "A";
+          break;
+        case "B":
+          antigen = "B";
+          break;
+        case "O":
+          antigen = "O";
+          break;
+        case "AB":
+          antigen = "AB";
+          break;
+      }
+    }
+    let diabetic = isDiabetic ? "TYPE1" : "NAN";
+    if (!(heartDonor || liverDonor || lungDonor || kidneyDonor)) {
+      setErrorMessage("At least one organ is required");
+      return;
+    }
 
-    // Use the form input states as needed
-    console.log({
-      name,
-      dob,
-      sex,
-      phone,
-      nextOfKin,
-      nextOfKinPhone,
-      bloodGroup,
-      isDiabetic,
-      isHypertensive,
-      deceased,
-      heartDonor,
-      lungDonor,
-      kidneyDonor,
-      liverDonor,
-      heartDescription,
-      lungDescription,
-      kidneyDescription,
-      liverDescription,
+    let donorData = {
+      name: name,
+      dob: dob,
+      sex: sex,
+      phoneNumber: phone,
+      nextOfKin: nextOfKin,
+      nextOfKinPhone: nextOfKinPhone,
+      antigen: antigen,
+      rh: rh,
+      diabetes: diabetic,
+      hypertensive: isHypertensive,
+      description: "",
+      hospitalId: hospitalID,
+      deceased: deceased,
+    };
+
+    axios.post(apiUrl + "/matcher/donor", donorData).then((res) => {
+      let donorId = res.data;
+      let organData = {
+        donorId: 0,
+        hospitalId: hospitalID,
+        organType: "string",
+        organStatus: "BODY",
+        description: "string",
+      };
+      setSuccessMessage("Donor added successfully");
+      setName("");
+      setDob("");
+      setSex("");
+      setPhone("");
+      setNextOfKin("");
+      setNextOfKinPhone("");
+      setBloodGroup("");
+      setIsDiabetic(false);
+      setIsHypertensive(false);
+      setDeceased(false);
+      setHeartDonor(false);
+      setLungDonor(false);
+      setKidneyDonor(false);
+      setLiverDonor(false);
+      setHeartDescription("");
+      setLungDescription("");
+      setKidneyDescription("");
+      setLiverDescription("");
+      setErrorMessage("");
+      if (heartDonor) {
+        organData.donorId = donorId;
+        organData.organType = "HEART";
+        organData.organStatus = "BODY";
+        organData.description = heartDescription;
+        console.log(organData);
+        axios
+          .post(apiUrl + "/matcher/organ", organData)
+          .then((res) => {
+            success = true;
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
+      if (lungDonor) {
+        organData.donorId = donorId;
+        organData.organType = "LUNG";
+        organData.organStatus = "BODY";
+        organData.description = lungDescription;
+        axios
+          .post(apiUrl + "/matcher/organ", organData)
+          .then((res) => {
+            success = true;
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
+      if (kidneyDonor) {
+        organData.donorId = donorId;
+        organData.organType = "KIDNEY";
+        organData.organStatus = "BODY";
+        organData.description = kidneyDescription;
+        axios
+          .post(apiUrl + "/matcher/organ", organData)
+          .then((res) => {
+            success = true;
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
+      if (liverDonor) {
+        organData.donorId = donorId;
+        organData.organType = "LIVER";
+        organData.organStatus = "BODY";
+        organData.description = liverDescription;
+        axios
+          .post(apiUrl + "/matcher/organ", organData)
+          .then((res) => {
+            success = true;
+          })
+          .catch((res) => {
+            console.log(res);
+          });
+      }
     });
   };
 
@@ -54,6 +191,7 @@ const AddDonor = () => {
         <form onSubmit={handleSubmit}>
           <h2 className="form-heading">Add Donor</h2>
           <h3 className="form-sub-heading">Donor Details</h3>
+          {errorMessage && <p className="text-danger">{errorMessage}</p>}
           <div className="mb-3">
             <label htmlFor="donor-name" className="form-label">
               Name
@@ -293,7 +431,7 @@ const AddDonor = () => {
               ></textarea>
             )}
           </div>
-
+          {successMessage && <h4 className="text-success">{successMessage}</h4>}
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
