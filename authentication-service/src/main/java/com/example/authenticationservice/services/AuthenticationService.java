@@ -25,6 +25,7 @@ public class AuthenticationService {
     public AuthenticationResponse register(RegisterRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
          User user = proxy.createUser(request);
+         repository.save(user);
          var jwtToken = jwtService.generateToken(user);
          return AuthenticationResponse.builder().token(jwtToken).build();
     }
@@ -32,11 +33,11 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getRollNum(),
+                        request.getId(),
                         request.getPassword()
                 )
         );
-        var user = repository.findById(request.getRollNum()).orElseThrow();
+        var user = repository.findById(request.getId()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder().token(jwtToken).build();
     }

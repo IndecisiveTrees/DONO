@@ -10,12 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/authentication-service/v1")
+@RequestMapping("/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticationService service;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request){
+        System.out.println("here");
         return ResponseEntity.ok(service.register(request));
     }
 

@@ -1,10 +1,11 @@
 package com.example.authenticationservice.models;
 
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,23 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@Table(name = "_user")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Document("_users")
 public class User implements UserDetails {
     @Id
-    private String rollNum;
-    @ManyToOne
-    @JoinColumn(name = "batch_id")
-    private Batch batch;
-
-    private String email;
-
-    private String name;
-
+    private String id;
     private String password;
 
     @Override
@@ -38,7 +30,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return rollNum;
+        return id;
     }
 
     @Override

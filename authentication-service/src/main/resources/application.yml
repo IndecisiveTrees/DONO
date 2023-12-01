@@ -5,10 +5,10 @@ spring :
       database : ${DB_DATABASE}
 
   application:
-    name : matcher
+    name: auth
 
-server :
-  port : 8080
+server:
+  port: 7070
 
 eureka :
   client :

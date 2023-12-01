@@ -1,15 +1,15 @@
-package com.example.authenticationservice.models;
+package com.example.matcher.requests;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
-@Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class UserCreationRequest {
     private String id;
     private String name;
     private String password;

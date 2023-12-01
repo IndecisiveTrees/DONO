@@ -6,10 +6,12 @@ import com.example.matcher.models.*;
 import com.example.matcher.repositories.HospitalRepository;
 import com.example.matcher.repositories.OrganRepository;
 import com.example.matcher.repositories.RecipientRepository;
+import com.example.matcher.requests.UserCreationRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +31,25 @@ public class HospitalController {
             throw new ResourceExistsException("Hospital exists");
         }
         hospitalRepository.save(hospital);
+    }
+
+    @PostMapping("/user")
+    public User createUser(@RequestBody UserCreationRequest req){
+        System.out.println("here");
+        Hospital hospital = new Hospital(
+                req.getId(),
+                req.getName(),
+                req.getLatitude(),
+                req.getLongitude(),
+                new ArrayList<>()
+        );
+        System.out.println(hospital);
+        createHospital(hospital);
+        User user = new User(
+                req.getId(),
+                req.getPassword()
+        );
+        return user;
     }
 
     @GetMapping
