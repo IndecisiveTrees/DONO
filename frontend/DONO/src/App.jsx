@@ -9,6 +9,9 @@ import HospitalHomePage from "./pages/HospitalHome";
 import LandingPage from "./pages/LandingPage";
 import HospitalLogin from "./pages/HospitalLogin";
 import Navbar from "./components/Navbar";
+import NotificationPage from "./pages/NotificationPage";
+import PastRecipients from "./pages/PastReciepients";
+import PastOrgans from "./pages/PastOrgans";
 
 function App() {
   return (
@@ -20,6 +23,10 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<HospitalLogin />} />
             <Route path="/hospital" element={<HospitalHomePage />} />
+            <Route
+              path="/hospital/notifications"
+              element={<NotificationPage />}
+            />
             <Route path="/hospital/add-recipient" element={<AddRecipient />} />
             <Route
               path="/hospital/active-recipients"
@@ -27,6 +34,11 @@ function App() {
             />
             <Route path="/hospital/add-donor" element={<AddDonor />}></Route>
             <Route path="/hospital/active-organs" element={<ActiveOrgans />} />
+            <Route
+              path="/hospital/past-recipients"
+              element={<PastRecipients />}
+            />
+            <Route path="/hospital/past-organs" element={<PastOrgans />} />
           </Routes>
         </BrowserRouter>
       </div>
