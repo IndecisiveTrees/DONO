@@ -16,4 +16,6 @@ public class Notifcation {
     private LocalDate time;
     private String message;
     private Boolean read;
+    private long recipientId;
+    private long organId;
 }

@@ -1,6 +1,6 @@
 package com.example.matcher.controllers;
 
-import com.example.matcher.exceptions.ResourceExists;
+import com.example.matcher.exceptions.ResourceExistsException;
 import com.example.matcher.exceptions.ResourceNotFoundException;
 import com.example.matcher.models.Hospital;
 import com.example.matcher.models.Notifcation;
@@ -12,7 +12,6 @@ import com.example.matcher.repositories.RecipientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,7 +28,7 @@ public class HospitalController {
     @PostMapping
     public void createHospital(@RequestBody Hospital hospital){
         if(hospitalRepository.existsById(hospital.getId())){
-            throw new ResourceExists("Hospital exists");
+            throw new ResourceExistsException("Hospital exists");
         }
         hospitalRepository.save(hospital);
     }

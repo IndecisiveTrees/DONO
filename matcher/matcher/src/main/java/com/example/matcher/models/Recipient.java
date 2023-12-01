@@ -22,13 +22,13 @@ public class Recipient extends Person{
     private int viability;
     private ArrayList<Long> receivedOrganIds = new ArrayList<Long>();
 
-    public Recipient(long id, String name, LocalDate dob, String sex, String phoneNumber, String nextOfKin, String nextOfKinPhone, BloodGroup bloodGroup, MedicalRecord medicalRecord, String hospitalId, Boolean deceased, OrganNeeded organNeeded, int severity, int viability) {
+    public Recipient(long id, String name, LocalDate dob, String sex, String phoneNumber, String nextOfKin, String nextOfKinPhone, BloodGroup bloodGroup, MedicalRecord medicalRecord, String hospitalId, Boolean deceased, OrganNeeded organNeeded, int severity, int viability, ArrayList<Long> receivedOrganIds) {
         super(name, dob, sex, phoneNumber, nextOfKin, nextOfKinPhone, bloodGroup, medicalRecord, hospitalId, deceased);
         this.id = id;
         this.organNeeded = organNeeded;
         this.severity = severity;
         this.viability = viability;
-        this.receivedOrganIds = new ArrayList<Long>();
+        this.receivedOrganIds = receivedOrganIds;
     }
 
     public void addOrgan(long organId){

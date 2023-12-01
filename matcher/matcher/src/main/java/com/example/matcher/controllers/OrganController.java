@@ -5,6 +5,8 @@ import com.example.matcher.models.*;
 import com.example.matcher.repositories.IdSequenceRepository;
 import com.example.matcher.repositories.OrganRepository;
 import com.example.matcher.requests.OrganCreationRequest;
+import com.example.matcher.requests.OrganDetailsUpdateRequest;
+import com.example.matcher.requests.OrganStatusUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,4 +57,19 @@ public class OrganController {
     public void deleteOrganById(@PathVariable long id){
         organRepository.deleteById(id);
     }
+
+    @PutMapping("/{id}/description")
+    public void updateOrganDescription(@PathVariable long id, @RequestBody OrganDetailsUpdateRequest req){
+        Organ organ =  getOrganById(id);
+        organ.setDescription(req.getDescription());
+        organRepository.save(organ);
+    }
+
+    @PutMapping("/{id}/status")
+    public void updateOrganStatus(@PathVariable long id, @RequestBody OrganStatusUpdateRequest req){
+        Organ organ =  getOrganById(id);
+        organ.setOrganStatus(OrganStatus.valueOf(req.getStatus()));
+        organRepository.save(organ);
+    }
+
 }
