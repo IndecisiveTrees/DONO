@@ -100,6 +100,18 @@ public class OrganController {
         organ.setDescription(req.getDescription());
         organ.setCreationTime(LocalDateTime.now());
 
+        Recipient bestMatch = match(organ);
+        Notifcation notifcation = new Notifcation(
+                LocalDateTime.now(),
+                String.format("A match has been found for patientId : %d.", bestMatch.getId()),
+                false,
+                bestMatch.getId(),
+                organ.getId()
+        );
+        Hospital hospital = hospitalRepository.findById(bestMatch.getHospitalId()).get();
+        hospital.addNotifcation(notifcation);
+        hospitalRepository.save(hospital);
+
         organRepository.save(organ);
         return nextId;
     }
@@ -137,4 +149,23 @@ public class OrganController {
         organRepository.save(organ);
     }
 
+    @GetMapping("/{id}/decline/recipient/{recipientId}")
+    public void declineOrgan(@PathVariable long id, @PathVariable long recipientId){
+        Organ organ = getOrganById(id);
+        organ.addDeclined(recipientId);
+
+        Recipient bestMatch = match(organ);
+        Notifcation notifcation = new Notifcation(
+                LocalDateTime.now(),
+                String.format("A match has been found for patientId : %d.", bestMatch.getId()),
+                false,
+                bestMatch.getId(),
+                organ.getId()
+        );
+        Hospital hospital = hospitalRepository.findById(bestMatch.getHospitalId()).get();
+        hospital.addNotifcation(notifcation);
+
+        hospitalRepository.save(hospital);
+        organRepository.save(organ);
+    }
 }

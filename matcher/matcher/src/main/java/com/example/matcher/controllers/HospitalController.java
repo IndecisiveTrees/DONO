@@ -2,16 +2,14 @@ package com.example.matcher.controllers;
 
 import com.example.matcher.exceptions.ResourceExistsException;
 import com.example.matcher.exceptions.ResourceNotFoundException;
-import com.example.matcher.models.Hospital;
-import com.example.matcher.models.Notifcation;
-import com.example.matcher.models.Organ;
-import com.example.matcher.models.Recipient;
+import com.example.matcher.models.*;
 import com.example.matcher.repositories.HospitalRepository;
 import com.example.matcher.repositories.OrganRepository;
 import com.example.matcher.repositories.RecipientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,5 +77,45 @@ public class HospitalController {
     public List<Notifcation> getNotificationsById(@PathVariable String id){
         Hospital hospital = getHospitalById(id);
         return hospital.getNotifications();
+    }
+
+    @GetMapping("/{id}/accept/recipient/{recipientId}/organ/{organId}")
+    public void accept(
+            @PathVariable String id,
+            @PathVariable long recipientId,
+            @PathVariable long organId
+    ){
+        Optional<Organ> organOptional = organRepository.findById(organId);
+        if(organOptional.isEmpty()){
+            throw new ResourceNotFoundException("Organ not found");
+        }
+
+        Optional<Recipient> recipientOptional = recipientRepository.findById(recipientId);
+        if(recipientOptional.isEmpty()){
+            throw new ResourceNotFoundException("Recipient not found");
+        }
+
+        Notifcation notifcation = new Notifcation(
+                LocalDateTime.now(),
+                String.format("Organ with id : %d has been matched to patient with id : %d in hospital with id : %s", organId, recipientId, id),
+                false,
+                recipientId,
+                organId
+        );
+
+        Hospital hospital = hospitalRepository.findById(organOptional.get().getHospitalId()).get();
+        hospital.addNotifcation(notifcation);
+        hospitalRepository.save(hospital);
+
+        Recipient recipient = recipientOptional.get();
+        Organ organ = organOptional.get();
+
+        recipient.setOrganNeeded(OrganNeeded.NAN);
+        recipient.addOrgan(organId);
+
+        organ.setOrganStatus(OrganStatus.TRANSIT);
+
+        recipientRepository.save(recipient);
+        organRepository.save(organ);
     }
 }

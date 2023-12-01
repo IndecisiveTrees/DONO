@@ -23,7 +23,7 @@ public class Organ {
     private LocalDateTime creationTime;
     private OrganStatus organStatus;
     private String description;
-    private ArrayList<Long> declinedIds;
+    private ArrayList<Long> declinedIds = new ArrayList<Long>();
 
     public Organ(long donorId, String hospitalId, OrganType organType, LocalDateTime creationTime, OrganStatus organStatus, String description, ArrayList<Long> declinedIds) {
         super();
@@ -34,5 +34,11 @@ public class Organ {
         this.organStatus = organStatus;
         this.description = description;
         this.declinedIds = declinedIds;
+        if(this.declinedIds == null){
+            this.declinedIds = new ArrayList<Long>();
+        }
+    }
+    public void addDeclined(long declinedId){
+        declinedIds.add(declinedId);
     }
 }

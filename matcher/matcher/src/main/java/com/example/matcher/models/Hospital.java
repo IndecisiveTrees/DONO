@@ -27,6 +27,9 @@ public class Hospital {
         this.latitude = latitude;
         this.longitude = longitude;
         this.notifications = notifications;
+        if(this.notifications == null){
+            this.notifications = new ArrayList<Notifcation>();
+        }
     }
     public void addNotifcation(Notifcation notification){
         notifications.add(notification);
