@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-
-const hospitalID = "adi";
-const apiUrl = "http://localhost:8080";
+import { apiUrl, hospitalID } from "../globals";
 
 const AddRecipient = () => {
   // State variables for form inputs
@@ -127,7 +125,7 @@ const AddRecipient = () => {
           <h2 className="form-heading">Add Recipient</h2>
           <h3 className="form-sub-heading">Patient Details</h3>
           {errorMessage && <p className="text-danger">{errorMessage}</p>}
-          {successMessage && <p className="text-success">{successMessage}</p>}
+
           <div className="mb-3">
             <label htmlFor="recipient-name" className="form-label">
               Name
@@ -330,6 +328,9 @@ const AddRecipient = () => {
               onChange={(e) => setDescription(e.target.value)}
             ></textarea>
           </div>
+          {successMessage && (
+            <h4 className="text-success textcenter">{successMessage}</h4>
+          )}
           <button type="submit" className="btn btn-primary">
             Submit
           </button>
