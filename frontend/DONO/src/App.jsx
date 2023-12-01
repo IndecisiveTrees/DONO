@@ -6,13 +6,19 @@ import ActiveRecipents from "./pages/ActiveRecipents";
 import AddDonor from "./pages/AddDonor";
 import ActiveOrgans from "./pages/ActiveOrgans";
 import HospitalHomePage from "./pages/HospitalHome";
+import LandingPage from "./pages/LandingPage";
+import HospitalLogin from "./pages/HospitalLogin";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
     <>
       <div className="app">
         <BrowserRouter>
+          <Navbar></Navbar>
           <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<HospitalLogin />} />
             <Route path="/hospital" element={<HospitalHomePage />} />
             <Route path="/hospital/add-recipient" element={<AddRecipient />} />
             <Route
