@@ -7,19 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
-
-enum OrganType{
-    HEART,
-    LIVER,
-    KIDNEY,
-    LUNG
-}
-
-enum OrganStatus{
-    BODY,
-    TRANSIT,
-    TRANSPLANTED
-}
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -31,11 +19,11 @@ public class Organ {
     private long donorId;
     private String hospitalId;
     private OrganType organType;
-    private LocalDate creationTime;
+    private LocalDateTime creationTime;
     private OrganStatus organStatus;
     private String description;
 
-    public Organ(long donorId, String hospitalId, OrganType organType, LocalDate creationTime, OrganStatus organStatus, String description) {
+    public Organ(long donorId, String hospitalId, OrganType organType, LocalDateTime creationTime, OrganStatus organStatus, String description) {
         super();
         this.donorId = donorId;
         this.hospitalId = hospitalId;
