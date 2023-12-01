@@ -6,24 +6,24 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @Setter
 @NoArgsConstructor
 public class Person {
     protected String name;
-    protected LocalDateTime dob;
+    protected LocalDate dob;
     protected String sex;
     protected String phoneNumber;
     protected String nextOfKin;
     protected String nextOfKinPhone;
     protected BloodGroup bloodGroup;
     protected MedicalRecord medicalRecord;
-    protected long hospitalId;
+    protected String hospitalId;
     protected Boolean deceased;
 
-    public Person(String name, LocalDateTime dob, String sex, String phoneNumber, String nextOfKin, String nextOfKinPhone, BloodGroup bloodGroup, MedicalRecord medicalRecord, long hospitalId, Boolean deceased) {
+    public Person(String name, LocalDate dob, String sex, String phoneNumber, String nextOfKin, String nextOfKinPhone, BloodGroup bloodGroup, MedicalRecord medicalRecord, String hospitalId, Boolean deceased) {
         super();
         this.name = name;
         this.dob = dob;
