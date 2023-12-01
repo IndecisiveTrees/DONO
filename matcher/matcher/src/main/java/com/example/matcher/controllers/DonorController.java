@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/matcher/donor")
 public class DonorController {
     @Autowired

@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/matcher/recipient")
 public class RecipientController {
     @Autowired

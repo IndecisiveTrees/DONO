@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/matcher/organ")
 public class OrganController {
     @Autowired
@@ -76,6 +77,7 @@ public class OrganController {
 
     @PostMapping
     public long createOrgan(@RequestBody OrganCreationRequest req){
+        System.out.println(req);
         IdSequence idSequence = idSequenceRepository.findById("organ").get();
         long nextId = idSequence.getIdvalue();
         idSequence.setIdvalue(nextId + 1);
@@ -99,19 +101,19 @@ public class OrganController {
         );
         organ.setDescription(req.getDescription());
         organ.setCreationTime(LocalDateTime.now());
-
-        Recipient bestMatch = match(organ);
-        Notifcation notifcation = new Notifcation(
-                LocalDateTime.now(),
-                String.format("A match has been found for patientId : %d.", bestMatch.getId()),
-                false,
-                bestMatch.getId(),
-                organ.getId()
-        );
-        Hospital hospital = hospitalRepository.findById(bestMatch.getHospitalId()).get();
-        hospital.addNotifcation(notifcation);
-        hospitalRepository.save(hospital);
-
+        try{
+            Recipient bestMatch = match(organ);
+            Notifcation notifcation = new Notifcation(
+                    LocalDateTime.now(),
+                    String.format("A match has been found for patientId : %d.", bestMatch.getId()),
+                    false,
+                    bestMatch.getId(),
+                    organ.getId()
+            );
+            Hospital hospital = hospitalRepository.findById(bestMatch.getHospitalId()).get();
+            hospital.addNotifcation(notifcation);
+            hospitalRepository.save(hospital);
+        }catch(Exception e){}
         organRepository.save(organ);
         return nextId;
     }
