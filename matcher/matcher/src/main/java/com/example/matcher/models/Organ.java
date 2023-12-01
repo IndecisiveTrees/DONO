@@ -29,14 +29,16 @@ public class Organ {
     @Id
     private long id;
     private long donorId;
+    private String hospitalId;
     private OrganType organType;
     private LocalDate creationTime;
     private OrganStatus organStatus;
     private String description;
 
-    public Organ(long donorId, OrganType organType, LocalDate creationTime, OrganStatus organStatus, String description) {
+    public Organ(long donorId, String hospitalId, OrganType organType, LocalDate creationTime, OrganStatus organStatus, String description) {
         super();
         this.donorId = donorId;
+        this.hospitalId = hospitalId;
         this.organType = organType;
         this.creationTime = creationTime;
         this.organStatus = organStatus;

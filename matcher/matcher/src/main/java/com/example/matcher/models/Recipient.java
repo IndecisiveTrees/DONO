@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 enum OrganNeeded{
     NAN,
@@ -27,7 +28,7 @@ public class Recipient extends Person{
     private OrganNeeded organNeeded;
     private int severity;
     private int viability;
-
+    private ArrayList<Long> receivedOrganIds;
 
     public Recipient(long id, String name, LocalDateTime dob, String sex, String phoneNumber, String nextOfKin, String nextOfKinPhone, BloodGroup bloodGroup, MedicalRecord medicalRecord, long hospitalId, Boolean deceased, OrganNeeded organNeeded, int severity, int viability) {
         super(name, dob, sex, phoneNumber, nextOfKin, nextOfKinPhone, bloodGroup, medicalRecord, hospitalId, deceased);
@@ -35,5 +36,10 @@ public class Recipient extends Person{
         this.organNeeded = organNeeded;
         this.severity = severity;
         this.viability = viability;
+        this.receivedOrganIds = new ArrayList<Long>();
+    }
+
+    public void addOrgan(long organId){
+        this.receivedOrganIds.add(organId);
     }
 }

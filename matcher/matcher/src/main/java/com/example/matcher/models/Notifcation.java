@@ -11,17 +11,9 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@Document("_notifications")
+@AllArgsConstructor
 public class Notifcation {
-
     private LocalDate time;
     private String message;
     private Boolean read;
-
-    public Notifcation(LocalDate time, String message, Boolean read) {
-        super();
-        this.time = time;
-        this.message = message;
-        this.read = read;
-    }
 }

@@ -15,5 +15,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class IdSequence {
     @Id
     private String name;
-    private String idvalue;
+    private long idvalue;
 }
