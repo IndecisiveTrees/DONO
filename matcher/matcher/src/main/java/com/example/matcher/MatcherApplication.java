@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 
 @SpringBootApplication
 @EnableMongoRepositories
+
 public class MatcherApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MatcherApplication.class, args);

@@ -1,10 +1,10 @@
-package com.example.matcher;
+package com.example.emailvalidator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MatcherApplicationTests {
+class EmailValidatorApplicationTests {
 
 	@Test
 	void contextLoads() {
