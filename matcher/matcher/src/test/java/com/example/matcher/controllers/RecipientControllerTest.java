@@ -44,7 +44,7 @@ import java.time.LocalDate;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class OrganControllerTest {
+public class RecipientControllerTest {
 
 
     @Autowired
@@ -53,25 +53,25 @@ public class OrganControllerTest {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    private Organ organ;
+    private Recipient recipient;
 
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     public  void init() {
-        this.organ = new Organ(1001,null,null,null,null,null,null);
+        this.recipient = new Recipient(12,null, null, null, null, null, null, null, null, null, null, null, 0, 0, null);
 
     }
 
     @Test
-    public void createOrganTest() throws  Exception {
+    public void createRecipientTest() throws  Exception {
         System.out.println("HI");
         DonorCreationRequest dreq = new DonorCreationRequest();
         dreq.setName("Harsh");
-        ResultActions response = mvc.perform(post("/matcher/organ")
+        ResultActions response = mvc.perform(post("/matcher/recipient")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(organ)));
+                .content(objectMapper.writeValueAsString(recipient)));
 
 
         response.andDo(MockMvcResultHandlers.print());;
@@ -88,13 +88,13 @@ public class OrganControllerTest {
     }
 
     @Test
-    public void getorganbyidTest() throws Exception {
-        this.mvc.perform(get("/matcher/organ/1001")).andDo(print());
+    public void getrecipientyidTest() throws Exception {
+        this.mvc.perform(get("/matcher/recipient/12")).andDo(print());
     }
 
     @Test
-    public void deleteorganbyIdTest() throws Exception {
-        this.mvc.perform(delete("/matcher/organ/1001")).andDo(print());
+    public void deleterecipientbyIdTest() throws Exception {
+        this.mvc.perform(delete("/matcher/recipient/12")).andDo(print());
     }
 
 

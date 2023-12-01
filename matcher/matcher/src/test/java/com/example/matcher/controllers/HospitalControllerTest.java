@@ -64,7 +64,7 @@ public class HospitalControllerTest {
 
     @BeforeEach
     public  void init() {
-        this.hospital = new Hospital("111A", "Ha Ho", 12.11,11.15);
+        this.hospital = new Hospital("111A", null,0,0,null);
 
     }
 
