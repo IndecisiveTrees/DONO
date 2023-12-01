@@ -272,46 +272,48 @@ const RecipientTable = ({ data }) => {
           <option value="Lung">Lung</option>
         </select>
       </div>
-      <table className="table table-hover align-middle recipient-table">
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("name")}>Name</th>
-            <th onClick={() => handleSort("dob")}>Age</th>
-            <th onClick={() => handleSort("organNeeded")}>Organ Needed</th>
-            <th onClick={() => handleSort("severity")}>Severity</th>
-            <th onClick={() => handleSort("viability")}>Viability</th>
-            <th>Edit</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedData.map((recipient) => (
-            <tr key={recipient.id}>
-              <td>{recipient.name}</td>
-              <td>{calculateAge(recipient.dob)}</td>
-              <td>{recipient.organNeeded}</td>
-              <td>{recipient.severity}</td>
-              <td>{recipient.viability}</td>
-              <td>
-                <button
-                  className="btn btn-primary"
-                  onClick={() => openEditModal(recipient)}
-                >
-                  Edit
-                </button>
-              </td>
-              <td>
-                <button
-                  className="btn btn-danger"
-                  onClick={() => handleRemove(recipient.id)}
-                >
-                  Remove
-                </button>
-              </td>
+      <div className="table-container">
+        <table className="table table-hover align-middle">
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("name")}>Name</th>
+              <th onClick={() => handleSort("dob")}>Age</th>
+              <th onClick={() => handleSort("organNeeded")}>Organ Needed</th>
+              <th onClick={() => handleSort("severity")}>Severity</th>
+              <th onClick={() => handleSort("viability")}>Viability</th>
+              <th>Edit</th>
+              <th>Remove</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {sortedData.map((recipient) => (
+              <tr key={recipient.id}>
+                <td>{recipient.name}</td>
+                <td>{calculateAge(recipient.dob)}</td>
+                <td>{recipient.organNeeded}</td>
+                <td>{recipient.severity}</td>
+                <td>{recipient.viability}</td>
+                <td>
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => openEditModal(recipient)}
+                  >
+                    Edit
+                  </button>
+                </td>
+                <td>
+                  <button
+                    className="btn btn-danger"
+                    onClick={() => handleRemove(recipient.id)}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Edit Modal */}
       <Modal

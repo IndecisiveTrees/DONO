@@ -34,6 +34,10 @@
   
 }
 
+.hospital-home-page {
+  width: 75%;
+}
+
 .form-date {
   color: black;
   background-color: white;
@@ -60,7 +64,7 @@
   backdrop-filter: blur(10px);
 }
 
-.recipient-table {
+.table-container {
   text-align: center;
   @include glass-look();
   tr {
@@ -72,11 +76,10 @@
   th {
     cursor: pointer;
   }
-  width: 80% !important;
   background: none;
   border-radius: 20px;
   max-height: 80%;
-  overflow-y: scroll;
+  // overflow-y: scroll;
 }
 
 .filter {
