@@ -1,4 +1,4 @@
 const hospitalID = "adi";
-const apiUrl = "http://localhost:8001";
+const apiUrl = "http://localhost:8080";
 
 export { hospitalID, apiUrl };

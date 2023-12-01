@@ -1,176 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
-
-let data = [
-  {
-    donor: {
-      id: "1",
-      name: "John Doe",
-      dob: new Date("1980-05-15"),
-      sex: "Male",
-      phone: "123-456-7890",
-      nextOfKin: "Jane Doe",
-      nextOfKinPhone: "987-654-3210",
-      bloodGroup: "A+",
-      isDiabetic: false,
-      isHypertensive: true,
-    },
-    type: "Heart",
-    creationTime: new Date("2023-01-01T10:30:00"),
-    status: "Active",
-    description: "Healthy heart for transplant",
-  },
-  {
-    donor: {
-      id: "2",
-      name: "Alice Johnson",
-      dob: new Date("1985-08-22"),
-      sex: "Female",
-      phone: "555-123-4567",
-      nextOfKin: "Bob Johnson",
-      nextOfKinPhone: "555-987-6543",
-      bloodGroup: "B-",
-      isDiabetic: true,
-      isHypertensive: false,
-    },
-    type: "Kidney",
-    creationTime: new Date("2023-01-02T08:45:00"),
-    status: "Active",
-    description: "Kidney for transplant with some conditions",
-  },
-  {
-    donor: {
-      id: "3",
-      name: "Charlie Smith",
-      dob: new Date("1978-12-10"),
-      sex: "Male",
-      phone: "321-654-9870",
-      nextOfKin: "Diana Smith",
-      nextOfKinPhone: "789-456-1230",
-      bloodGroup: "O+",
-      isDiabetic: false,
-      isHypertensive: true,
-    },
-    type: "Liver",
-    creationTime: new Date("2023-01-03T15:20:00"),
-    status: "Active",
-    description: "Liver for transplant with high viability",
-  },
-  {
-    donor: {
-      id: "4",
-      name: "Eva Thompson",
-      dob: new Date("1992-04-18"),
-      sex: "Female",
-      phone: "444-555-6666",
-      nextOfKin: "Frank Thompson",
-      nextOfKinPhone: "777-888-9999",
-      bloodGroup: "AB+",
-      isDiabetic: true,
-      isHypertensive: true,
-    },
-    type: "Lung",
-    creationTime: new Date("2023-01-04T12:10:00"),
-    status: "Active",
-    description: "Lung for transplant with no specific conditions",
-  },
-  {
-    donor: {
-      id: "5",
-      name: "George Wilson",
-      dob: new Date("1980-09-25"),
-      sex: "Male",
-      phone: "999-888-7777",
-      nextOfKin: "Helen Wilson",
-      nextOfKinPhone: "666-555-4444",
-      bloodGroup: "B+",
-      isDiabetic: false,
-      isHypertensive: false,
-    },
-    type: "Kidney",
-    creationTime: new Date("2023-01-05T14:00:00"),
-    status: "Active",
-    description: "Kidney for transplant with moderate viability",
-  },
-  {
-    donor: {
-      id: "6",
-      name: "Ivy Brown",
-      dob: new Date("1995-02-08"),
-      sex: "Female",
-      phone: "111-222-3333",
-      nextOfKin: "Jack Brown",
-      nextOfKinPhone: "444-333-2222",
-      bloodGroup: "O-",
-      isDiabetic: true,
-      isHypertensive: false,
-    },
-    type: "Heart",
-    creationTime: new Date("2023-01-06T09:45:00"),
-    status: "Active",
-    description: "Heart for transplant with low viability",
-  },
-
-  {
-    donor: {
-      id: "7",
-      name: "Ivy Brown",
-      dob: new Date("1995-02-08"),
-      sex: "Female",
-      phone: "111-222-3333",
-      nextOfKin: "Jack Brown",
-      nextOfKinPhone: "444-333-2222",
-      bloodGroup: "O-",
-      isDiabetic: true,
-      isHypertensive: false,
-    },
-    type: "Heart",
-    creationTime: new Date("2023-01-06T09:45:00"),
-    status: "Active",
-    description: "Heart for transplant with low viability",
-  },
-
-  {
-    donor: {
-      id: "8",
-      name: "Ivy Brown",
-      dob: new Date("1995-02-08"),
-      sex: "Female",
-      phone: "111-222-3333",
-      nextOfKin: "Jack Brown",
-      nextOfKinPhone: "444-333-2222",
-      bloodGroup: "O-",
-      isDiabetic: true,
-      isHypertensive: false,
-    },
-    type: "Heart",
-    creationTime: new Date("2023-01-06T09:45:00"),
-    status: "Active",
-    description: "Heart for transplant with low viability",
-  },
-
-  {
-    donor: {
-      id: "9",
-      name: "Ivy Brown",
-      dob: new Date("1995-02-08"),
-      sex: "Female",
-      phone: "111-222-3333",
-      nextOfKin: "Jack Brown",
-      nextOfKinPhone: "444-333-2222",
-      bloodGroup: "O-",
-      isDiabetic: true,
-      isHypertensive: false,
-    },
-    type: "Heart",
-    creationTime: new Date("2023-01-06T09:45:00"),
-    status: "Active",
-    description: "Heart for transplant with low viability",
-  },
-];
+import axios from "axios";
+import { apiUrl, hospitalID } from "../globals";
 
 const OrganTable = () => {
+  const [data, setData] = useState([]);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: "" });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedOrgan, setSelectedOrgan] = useState(null);
@@ -178,6 +13,14 @@ const OrganTable = () => {
     description: "",
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios
+      .get(apiUrl + "/matcher/hospital/" + hospitalID + "/organs")
+      .then((res) => {
+        setData(res.data);
+      });
+  }, []);
 
   const handleSort = (key) => {
     let direction = "asc";
@@ -213,20 +56,15 @@ const OrganTable = () => {
     closeEditModal();
   };
 
-  const calculateAge = (dob) => {
-    const today = new Date();
-    const birthDate = new Date(dob);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const monthDiff = today.getMonth() - birthDate.getMonth();
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--;
-    }
-
-    return age;
+  const handleRemove = (organId) => {
+    axios
+      .delete(apiUrl + "/matcher/organ/" + organId)
+      .then((res) => {
+        console.log("target has been neutralized");
+      })
+      .catch((res) => {
+        console.log("Error: skill issue");
+      });
   };
 
   const calculateHoursSinceCreation = (creationTime) => {
@@ -235,16 +73,6 @@ const OrganTable = () => {
     const diffInHours = diffInMilliseconds / (1000 * 60 * 60);
     return Math.round(diffInHours);
   };
-
-  data = data.map((organ) => {
-    organ.donorName = organ.donor.name;
-    organ.donorAge = calculateAge(organ.donor.dob);
-    organ.donorHoursSinceCreation = calculateHoursSinceCreation(
-      organ.creationTime
-    );
-    organ.donorBloodGroup = organ.donor.bloodGroup;
-    return organ;
-  });
 
   const sortedData = [...data].sort((a, b) => {
     if (sortConfig.direction === "asc") {
@@ -270,13 +98,10 @@ const OrganTable = () => {
         <table className="table table-hover align-middle">
           <thead>
             <tr>
-              <th onClick={() => handleSort("donorName")}>Donor Name</th>
-              <th onClick={() => handleSort("type")}>Organ Type</th>
-              <th onClick={() => handleSort("donorAge")}>Donor Age</th>
+              <th onClick={() => handleSort("organType")}>Organ Type</th>
               <th onClick={() => handleSort("creationTime")}>
                 Hours Since Creation
               </th>
-              <th onClick={() => handleSort("donorBloodGroup")}>Blood Group</th>
               <th>Edit</th>
               <th>Remove</th>
             </tr>
@@ -284,12 +109,9 @@ const OrganTable = () => {
           <tbody>
             {/* Map through organ data and render table rows */}
             {sortedData.map((organ) => (
-              <tr key={organ.donor.id}>
-                <td>{organ.donor.name}</td>
-                <td>{organ.type}</td>
-                <td>{calculateAge(organ.donor.dob)}</td>
+              <tr key={organ.id}>
+                <td>{organ.organType}</td>
                 <td>{calculateHoursSinceCreation(organ.creationTime)}</td>
-                <td>{organ.donor.bloodGroup}</td>
                 <td>
                   <button
                     className="btn btn-primary"
@@ -301,7 +123,7 @@ const OrganTable = () => {
                 <td>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleRemove(organ.donor.id)}
+                    onClick={() => handleRemove(organ.id)}
                   >
                     Remove
                   </button>
@@ -343,11 +165,6 @@ const OrganTable = () => {
       </Modal>
     </div>
   );
-};
-
-const handleRemove = (donorId) => {
-  // Handle remove logic here
-  console.log(`Remove organ with donor ID ${donorId}`);
 };
 
 export default OrganTable;
